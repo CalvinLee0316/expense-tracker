@@ -1,11 +1,15 @@
-const express = require('express');
+import 'dotenv/config';
+import express from "express";
+import cors from "cors";
+// import dotenv from "dotenv";
+import mongoose from "mongoose";
+import TransactionModel from "./models/Transaction.js"
+import 'dotenv/config'; // To read CLERK_SECRET_KEY
+import {ClerkExpressWithAuth} from '@clerk/clerk-sdk-node';
+const Transaction = TransactionModel;
 const app = express();
-const cors = require('cors');
 const port = process.env.PORT || 4040;
-
-require('dotenv').config();
-const mongoose = require('mongoose');
-const Transaction = require('./models/Transaction.js');
+// dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.get('/api/test', (req, res) => {
@@ -13,38 +17,47 @@ app.get('/api/test', (req, res) => {
 });
 
 
-app.post('/api/addTransaction', async (req, res) => {
+
+app.post('/api/addTransaction', ClerkExpressWithAuth(),async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
+    const user_id = req.auth.userId;
     const {name, price, category, date, dateNum, description} = req.body;
-    const transaction = await Transaction.create({name, price, category, date, dateNum, description});
+    const transaction = await Transaction.create({name, price, category, date, dateNum, description, user_id});
     res.json(transaction)
 });
 
-app.get('/api/getTransactions', async (req, res) => {
+app.get('/api/getTransactions', ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
-    const transactions = await Transaction.find();
+    const id = req.auth.userId;
+    // console.log("Here")
+    // console.log(req.auth)
+    // console.log(req.auth.userId);
+    const transactions = await Transaction.find({user_id:id});
     res.json(transactions);
 });
 
-app.get('/api/getTransactions/category/:category', async (req, res) => {
+app.get('/api/getTransactions/category/:category', ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
+    const id = req.auth.userId;
     const c = req.params.category.replace('&', ' ').substring(1);
-    const transactions = await Transaction.find({category:c}).exec();
+    const transactions = await Transaction.find({user_id:id, category:c}).exec();
     res.json(transactions)
 });
 
-app.get('/api/getTransactions/date/:date', async (req, res) => {
+app.get('/api/getTransactions/date/:date',ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
+    const id = req.auth.userId;
     const d = req.params.date.substring(1);
-    const transactions = await Transaction.find({ date: { "$regex": d}}).exec();
+    const transactions = await Transaction.find({ user_id: id, date: { "$regex": d}}).exec();
     res.json(transactions)
 
 });
 
-app.get('/api/getTransactions/range/:month', async (req, res) => {
+app.get('/api/getTransactions/range/:month', ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
+    const id = req.auth.userId;
     const m = req.params.month;
-    const transactions = await Transaction.find({dateNum: {$gte: m-10000, $lt: addMonth(m)}}).exec();
+    const transactions = await Transaction.find({user_id: id, dateNum: {$gte: m-10000, $lt: addMonth(m)}}).exec();
     res.json(transactions);
 });
 
@@ -60,16 +73,17 @@ function addMonth(yyyymmdd){
     return String(year) + String(month).padStart(2, '0')+"00";
   }
 
-app.get('/api/getTransactions/:category/:date', async (req, res) => {
+app.get('/api/getTransactions/:category/:date',ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
+    const id = req.auth.userId;
     const c = req.params.category.replace('&', ' ').substring(1);
     const d = req.params.date;
-    const transactions = await Transaction.find({category:c, date: {"$regex":d}}).exec();
+    const transactions = await Transaction.find({user_id:id, category:c, date: {"$regex":d}}).exec();
     res.json(transactions)
 
 });
 
-app.delete('/api/deleteTransaction/:id', async (req, res) => {
+app.delete('/api/deleteTransaction/:id', ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
     const {id} = req.params;
     await Transaction.findByIdAndDelete(id);
