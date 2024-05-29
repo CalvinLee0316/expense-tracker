@@ -1,13 +1,11 @@
 import "../App.css";
 import React, { useEffect, useState } from "react";
-import { useAuth }  from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
+import { dark } from "@clerk/themes";
 // import { ClerkProvider } from "@clerk/clerk-react";
-import {
-  UserButton,
-  useUser,
-} from "@clerk/clerk-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
 function Main() {
   //spending states
   const [name, setName] = useState("");
@@ -24,7 +22,6 @@ function Main() {
 
   const { user } = useUser();
   const { getToken } = useAuth();
-  console.log(user)
 
   //analytics states
   const [analyticsMonth, setAnalyticsMonth] = useState(getCurrentYearMonth);
@@ -216,7 +213,13 @@ function Main() {
     const month = getCurrentYearMonth().replace("-", "") + "00";
     const url =
       process.env.REACT_APP_API_URL + "/getTransactions/range/" + month;
-    const res = await fetch(url, {"Authorization": `Bearer ${await getToken()}`});
+    const res = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getToken()}`,
+      },
+    });
     const json = await res.json();
     return json;
   }
@@ -248,8 +251,8 @@ function Main() {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${await getToken()}`
-      }
+        Authorization: `Bearer ${await getToken()}`,
+      },
     });
     const json = await res.json();
     return json;
@@ -268,7 +271,7 @@ function Main() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${await getToken()}`
+        Authorization: `Bearer ${await getToken()}`,
       },
       body: JSON.stringify(data),
     }).then((response) =>
@@ -296,7 +299,7 @@ function Main() {
         transactions[index]._id;
       fetch(url, {
         method: "DELETE",
-        "Authorization": `Bearer ${await getToken()}`,
+        Authorization: `Bearer ${await getToken()}`,
       }).then((response) =>
         response.json().then((json) => {
           console.log(json);
@@ -326,8 +329,10 @@ function Main() {
 
   return (
     <main>
+      <div class="float-child">
+        <UserButton/>
+      </div>
       <div class="mainTracker">
-        <UserButton />
         <h1>Welcome {user.firstName}!</h1>
         <h1>
           ${whole}
@@ -469,6 +474,7 @@ function Main() {
           <ReactEcharts option={lineOption} />
         </div>
       </div>
+      {/* </div> */}
     </main>
   );
 }

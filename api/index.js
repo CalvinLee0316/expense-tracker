@@ -1,15 +1,13 @@
 import 'dotenv/config';
 import express from "express";
 import cors from "cors";
-// import dotenv from "dotenv";
 import mongoose from "mongoose";
 import TransactionModel from "./models/Transaction.js"
-import 'dotenv/config'; // To read CLERK_SECRET_KEY
+
 import {ClerkExpressWithAuth} from '@clerk/clerk-sdk-node';
 const Transaction = TransactionModel;
 const app = express();
 const port = process.env.PORT || 4040;
-// dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.get('/api/test', (req, res) => {
