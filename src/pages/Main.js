@@ -32,7 +32,7 @@ function Main() {
 
   useEffect(() => {
     getTransactions(filter, month).then((t) => {
-      setTransactions(t);
+      setTransactions(t.toSorted(compare));
     });
   }, [num, filter, month]);
 
@@ -282,7 +282,6 @@ function Main() {
         setDateNum(0);
         setDescription("");
         setPrice("");
-        setCategory("Groceries");
         setNum(num + 1);
       })
     );
@@ -426,7 +425,7 @@ function Main() {
 
         <div class="transactions">
           {transactions.length > 0 &&
-            transactions.sort(compare).map((transaction, index) => (
+            transactions.map((transaction, index) => (
               <div class="transaction">
                 <div class="left">
                   <div class="name">{transaction.name}</div>
