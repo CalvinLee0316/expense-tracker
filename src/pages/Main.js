@@ -334,8 +334,7 @@ function Main() {
       <div class="mainTracker">
         <h1>Welcome {user.firstName}!</h1>
         <h1>
-          ${whole}
-          <span>{fraction}</span>
+          ${whole}{fraction}
         </h1>
         <form onSubmit={addTransaction}>
           <div class="basics">

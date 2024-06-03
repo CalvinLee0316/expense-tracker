@@ -1,262 +1,531 @@
-*{
-  box-sizing:border-box;
+@media screen and (min-width: 601px) {
+  * {
+    box-sizing: border-box;
+  }
+
+  .mainTracker {
+    width: 35%;
+    height: 100%;
+    border-right: 1px solid #fff;
+    padding-right: 50px;
+  }
+
+  main UserButton {
+    width: 5%;
+  }
+
+  .analytics {
+    width: 60%;
+    height: 100%;
+  }
+
+  main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    height: 100vh;
+  }
+
+  body {
+    background-color: #17181f;
+    color: #ddd;
+  }
+
+  h1 {
+    text-align: center;
+    color: #fff;
+    margin: 0;
+    font-size: 3vw;
+    margin-top: 10px;
+  }
+
+  h1 span {
+    font-size: 1rem;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  form {
+    margin-top: 20px;
+  }
+
+  form input {
+    width: 100%;
+    background-color: transparent;
+    color: #ddd;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  form div.basics {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+
+  form select {
+    width: 100%;
+    background-color: transparent;
+    color: #ddd;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  form div.category-date {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+
+  form button {
+    width: 100%;
+    background-color: #ddd;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  div.transactions {
+    margin-top: 5px;
+    overflow-y: auto;
+    height: 50%;
+  }
+
+  div.transaction {
+    display: flex;
+    padding: 5px 0;
+    border-top: 1px solid #30313d;
+  }
+
+  div.transaction:first-child {
+    border-top: 0;
+  }
+
+  div.transaction div.name {
+    font-size: 1.2rem;
+  }
+
+  div.transaction div.description {
+    font-size: 0.8rem;
+    color: #888;
+  }
+
+  div.transaction div {
+    border: 0;
+  }
+
+  div.left {
+    width: 30%;
+  }
+  div.right {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  div.middle {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  div.category {
+    margin-left: auto;
+    text-align: center;
+    width: 20%;
+  }
+
+  div.price {
+    color: red;
+    font-size: 1.2rem;
+  }
+
+  div.date {
+    font-size: 0.8rem;
+    color: #888;
+  }
+
+  div.filter {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  div.filter select {
+    width: 20%;
+    background-color: transparent;
+    color: white;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  div.analytics {
+    align-items: center;
+    margin-bottom: -10%;
+  }
+
+  div.analytics h1 {
+    text-align: left;
+    font-size: 3vw;
+  }
+
+  div.pie {
+    width: 100%;
+    height: 35%;
+    margin-top: 25px;
+  }
+
+  div.pie input[type="month"] {
+    width: 200px;
+    margin-left: 20px;
+  }
+
+  input[type="month"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+
+  input {
+    width: 100%;
+    background-color: transparent;
+    color: #ddd;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
+
+  div.line {
+    margin-top: 50px;
+    width: 100%;
+    height: 35%;
+  }
+
+  div.line h2 {
+    margin-left: 100px;
+    color: #ddd;
+  }
+
+  div.pie h2 {
+    color: #ddd;
+  }
+
+  .SignIn {
+    margin-top: 35vh;
+  }
+
+  button.delete-btn,
+  button.log {
+    cursor: pointer;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 0 10px;
+    padding: 10px 0;
+    box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+    transition: 0.4s;
+  }
+
+  .log {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    transform: translate(-50%, -50%);
+    color: rgb(104, 85, 224);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(104, 85, 224, 1);
+  }
+
+  button:hover {
+    color: white;
+    box-shadow: 0 0 20px rgba(104, 85, 224, 0.6);
+    background-color: rgba(104, 85, 224, 1);
+  }
+
+  .delete-btn {
+    width: 20px;
+  }
+
+  .float-child {
+    width: 5%;
+    margin-left: 10px;
+    margin-top: 10px;
+    float: left;
+  }
 }
 
-.mainTracker{
-  width: 35%;
-  height: 100%;
-}
+/* -------------------------------------------------------------------------- */
 
-main UserButton {
-  width: 5%;
+@media screen and (max-width: 600px) {
+  * {
+    box-sizing: border-box;
+  }
 
-}
+  .mainTracker {
+    width: 100%;
+    height: 80%;
+    border-bottom: 1px solid #fff;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
 
-.analytics{
-  width: 60%;
-  height:100%;
-}
+  main UserButton {
+    width: 5%;
+  }
 
-main{
-  width: 100%;
-  display:flex;
-  justify-content: space-between;
-  gap: 50px;
-  height:100vh;
-}
+  .analytics {
+    width: 100%;
+    padding-left: 25px;
+    padding-right: 25px;
+    /* height: 100%; */
+  }
 
-body{
-  background-color: #17181F;
-  color:#ddd;
-}
+  main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
+    height: 100vh;
+  }
 
-h1{
-  text-align:center;
-  color:#fff;
-  margin:0;
-  font-size:3rem;
-  margin-top: 10px;
-}
+  body {
+    background-color: #17181f;
+    color: #ddd;
+  }
 
-h1 span{
-  font-size:1rem;
-  vertical-align: top;
-  display:inline-block;
-  margin-top:6px;
-}
+  h1 {
+    text-align: center;
+    color: #fff;
+    margin: 0;
+    font-size: 5vw;
+    margin-top: 10px;
+  }
 
+  h1 span {
+    font-size: 1rem;
+    vertical-align: top;
+    display: inline-block;
+    margin-top: 6px;
+  }
 
-form{
- margin-top: 20px;
-}
+  form {
+    margin-top: 20px;
+  }
 
-form input  {
-  width:100%;
-  background-color: transparent;
-  color:#ddd;
-  border: 2px solid #30313d;
-  padding: 2px 5px;
-  border-radius: 5px;
-}
+  form input {
+    width: 100%;
+    background-color: transparent;
+    color: #ddd;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
 
+  form div.basics {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
 
-form div.basics{
-  display:flex;
-  gap: 5px;
-  margin-bottom: 5px;
-}
+  form select {
+    width: 100%;
+    background-color: transparent;
+    color: #ddd;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
 
-form select{
-  width: 100%;
-  background-color: transparent;
-  color:#ddd;
-  border: 2px solid #30313d;
-  padding: 2px 5px;
-  border-radius: 5px;
-}
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}
+  form div.category-date {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
 
-form div.category-date{
-  display:flex;
-  gap: 5px;
-  margin-bottom: 5px;
-}
+  form button {
+    width: 100%;
+    background-color: #ddd;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 5px;
+    padding: 5px;
+  }
 
-form button{
-  width: 100%;
-  background-color: #ddd;
-  margin-top: 10px;
-  border:0;
-  border-radius: 5px;;
-  padding: 5px;
-}
+  div.transactions {
+    margin-top: 5px;
+    overflow-y: auto;
+    height: 60%;
+  }
 
-div.transactions {
-  margin-top: 5px;
-}
+  div.transaction {
+    display: flex;
+    padding: 5px 0;
+    border-top: 1px solid #30313d;
+  }
 
-div.transaction{
-  display:flex;
-  padding: 5px 0;;
-  border-top: 1px solid #30313d;
-}
+  div.transaction:first-child {
+    border-top: 0;
+  }
 
-div.transaction:first-child{
-  border-top: 0;
-}
+  div.transaction div.name {
+    font-size: 1.2rem;
+  }
 
-div.transaction div.name{
-  font-size: 1.2rem; 
-}
+  div.transaction div.description {
+    font-size: 0.8rem;
+    color: #888;
+  }
 
-div.transaction div.description{
-  font-size: 0.8rem;
-  color: #888;
-}
+  div.transaction div {
+    border: 0;
+  }
 
-div.transaction div {
-  border:0;
-}
+  div.left {
+    width: 30%;
+  }
+  div.right {
+    text-align: right;
+    margin-left: auto;
+  }
 
-div.left{
-  width: 30%;
-}
-div.right{
-  text-align: right;
-  margin-left: auto;
-}
+  div.middle {
+    margin-left: auto;
+    text-align: right;
+  }
 
-div.middle{
-  margin-left:auto;
-  text-align: right;
-}
+  div.category {
+    margin-left: auto;
+    text-align: center;
+    width: 20%;
+  }
 
-div.category{
-  margin-left:auto;
-  text-align: center;
-  width: 20%;
-}
+  div.price {
+    color: red;
+    font-size: 1.2rem;
+  }
 
-div.price{
-  color: red;
-  font-size: 1.2rem;
-}
+  div.date {
+    font-size: 0.8rem;
+    color: #888;
+  }
 
-div.date{
-  font-size: 0.8rem;
-  color: #888;
-}
+  div.filter {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+  }
 
-div.filter{
-  display:flex;
-  gap: 5px;
-  margin-top: 10px;
-}
+  div.filter select {
+    width: 20%;
+    background-color: transparent;
+    color: white;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
 
-div.filter select{
-  width: 20%;
-  background-color: transparent;
-  color:white;
-  border: 2px solid #30313d;
-  padding: 2px 5px;
-  border-radius: 5px;
-}
+  div.analytics {
+    align-items: center;
+    margin-bottom: -10%;
+  }
 
-div.analytics {
-  align-items: center;
-  border-left: 1px solid #fff;
-  padding-left: 50px;
-  margin-bottom:-10%;
-}
+  div.analytics h1 {
+    text-align: left;
+    font-size: 5vw;
+  }
 
-div.analytics h1{
-  text-align: left;
-}
+  div.pie {
+    width: 100%;
+    height: 35%;
+    margin-top: 25px;
+  }
 
-div.pie {
-  width: 100%;
-  margin-top: 50px;
-}
+  div.pie input[type="month"] {
+    width: 200px;
+    margin-left: 20px;
+  }
 
-div.pie input[type="month"] {
-  width: 200px;
-  margin-left: 20px;
-}
+  input[type="month"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
 
-input[type="month"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}
+  input {
+    width: 100%;
+    background-color: transparent;
+    color: #ddd;
+    border: 2px solid #30313d;
+    padding: 2px 5px;
+    border-radius: 5px;
+  }
 
-input {
-  width:100%;
-  background-color: transparent;
-  color:#ddd;
-  border: 2px solid #30313d;
-  padding: 2px 5px;
-  border-radius: 5px;
-}
+  div.line {
+    margin-top: 50px;
+    width: 100%;
+    height: 35%;
+  }
 
+  div.line h2 {
+    margin-left: 100px;
+    color: #ddd;
+  }
 
-div.line {
-  margin-top: 50px;
-  width: 100%;
-}
+  div.pie h2 {
+    color: #ddd;
+  }
 
-div.line h2 {
-  margin-left: 100px;
-  color: #ddd;
-}
+  .SignIn {
+    margin-top: 35vh;
+  }
 
-div.pie h2{
-  color: #ddd;
-}
+  button.delete-btn,
+  button.log {
+    cursor: pointer;
+    border: 0;
+    border-radius: 4px;
+    font-weight: 600;
+    margin: 0 10px;
+    padding: 10px 0;
+    box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+    transition: 0.4s;
+  }
 
+  .log {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 200px;
+    transform: translate(-50%, -50%);
+    color: rgb(104, 85, 224);
+    background-color: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(104, 85, 224, 1);
+  }
 
+  button:hover {
+    color: white;
+    box-shadow: 0 0 20px rgba(104, 85, 224, 0.6);
+    background-color: rgba(104, 85, 224, 1);
+  }
 
+  .delete-btn {
+    width: 20px;
+  }
 
-.SignIn{
-  margin-top: 35vh;
-}
-
-
-button.delete-btn, button.log {
-  cursor: pointer;
-  border: 0 ;
-  border-radius: 4px;
-  font-weight: 600;
-  margin: 0 10px;
-  padding: 10px 0;
-  box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
-  transition: 0.4s;
-}
-
-.log {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 200px;
-  transform: translate(-50%, -50%);
-  color: rgb(104, 85, 224);
-  background-color: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(104, 85, 224, 1);
-}
-
-button:hover {
-  color: white;
-  box-shadow: 0 0 20px rgba(104, 85, 224, 0.6);
-  background-color: rgba(104, 85, 224, 1);
-}
-
-.delete-btn{
-  width: 20px;
-}
-
-.float-child {
-  width: 5%;
-  margin-left: 10px;
-  margin-top: 10px;
-  float: left;
+  .float-child {
+    width: 5%;
+    margin-left: 10px;
+    margin-top: 10px;
+    float: left;
+  }
 }
