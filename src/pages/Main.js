@@ -64,6 +64,7 @@ function Main() {
           formatter: "{a} <br/>{b} : {c} ({d}%)",
         },
         legend: {
+          show: false,
           orient: "vertical",
           left: 40,
           textStyle: { color: "white" },
