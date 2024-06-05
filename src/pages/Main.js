@@ -18,8 +18,6 @@ function Main() {
   const [num, setNum] = useState(0);
   const [month, setMonth] = useState("");
 
-  // const [username, setUsername] = useState("");
-
   const { user } = useUser();
   const { getToken } = useAuth();
 
@@ -29,6 +27,7 @@ function Main() {
   const [pieOption, setPieOption] = useState({});
   const [lineOption, setLineOption] = useState({});
   const [dateNum, setDateNum] = useState(0);
+
 
   useEffect(() => {
     getTransactions(filter, month).then((t) => {
@@ -112,12 +111,10 @@ function Main() {
     //line graph options
     getYearsTransactions().then((ts) => {
       let lineData = {};
-      console.log(ts);
       ts.forEach((transaction) => {
         const date = parseInt(
           transaction.date.substring(0, 7).replace("-", "")
         );
-        console.log(date);
         if (lineData[date]) {
           lineData[date] += transaction.price;
         } else {
@@ -125,14 +122,11 @@ function Main() {
         }
       });
       const now = parseInt(getCurrentYearMonth().replace("-", ""));
-      // console.log(now)
       for (let i = now; i > now - 100; i = parseInt(subtractMonth(String(i)))) {
-        // console.log(i)
         if (!lineData[i]) {
           lineData[i] = 0;
         }
       }
-      console.log(lineData);
       let lineOption = {
         title: {
           text: "Spending Trend Over Year",
@@ -277,7 +271,6 @@ function Main() {
       body: JSON.stringify(data),
     }).then((response) =>
       response.json().then((json) => {
-        console.log(json);
         setName("");
         setDate("");
         setDateNum(0);
@@ -302,12 +295,12 @@ function Main() {
         Authorization: `Bearer ${await getToken()}`,
       }).then((response) =>
         response.json().then((json) => {
-          console.log(json);
           setNum(num + 1);
         })
       );
     }
   }
+
 
   function compare(a, b) {
     if (a.dateNum >= b.dateNum) {
@@ -320,7 +313,7 @@ function Main() {
   let balance = 0;
 
   transactions.forEach((transaction) => {
-    balance += transaction.price;
+    balance += parseInt(transaction.price);
   });
 
   balance = balance.toFixed(2);
@@ -330,18 +323,19 @@ function Main() {
   return (
     <main>
       <div class="float-child">
-        <UserButton/>
+        <UserButton />
       </div>
       <div class="mainTracker">
         <h1>Welcome {user.firstName}!</h1>
         <h1>
-          ${whole}{fraction}
+          ${whole}
+          {fraction}
         </h1>
         <form onSubmit={addTransaction}>
           <div class="basics">
             <input
               autocomplete="off"
-              type="text"
+              type="number"
               required
               name="price"
               placeholder={"100.00"}
