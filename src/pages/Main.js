@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
-import { dark } from "@clerk/themes";
 // import { ClerkProvider } from "@clerk/clerk-react";
 import { UserButton, useUser } from "@clerk/clerk-react";
 function Main() {
@@ -12,11 +11,15 @@ function Main() {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Groceries");
   const [date, setDate] = useState("");
+  const [dateNum, setDateNum] = useState(0);
   const [description, setDescription] = useState("");
   const [filter, setFilter] = useState("All");
   const [transactions, setTransactions] = useState([]);
   const [num, setNum] = useState(0);
   const [month, setMonth] = useState("");
+
+  const [edit, setEdit] = useState(false);
+  const [editId, setEditId] = useState("");
 
   const { user } = useUser();
   const { getToken } = useAuth();
@@ -26,14 +29,12 @@ function Main() {
   // const [pieTransactions, setPieTransactions] = useState([]);
   const [pieOption, setPieOption] = useState({});
   const [lineOption, setLineOption] = useState({});
-  const [dateNum, setDateNum] = useState(0);
-
 
   useEffect(() => {
     getTransactions(filter, month).then((t) => {
       setTransactions(t.toSorted(compare));
     });
-  }, [num, filter, month]);
+  }, [transactions, num, filter, month]);
 
   useEffect(() => {
     getTransactions("All", analyticsMonth).then((ts) => {
@@ -281,6 +282,33 @@ function Main() {
     );
   }
 
+  async function editTransaction(ev) {
+    ev.preventDefault();
+    let re = /^\d+(?:[.]\d\d)*$/;
+    if (!re.test(price)) {
+      alert("Please enter a valid price");
+      return;
+    }
+    const url = process.env.REACT_APP_API_URL + "/editTransaction/" + editId;
+    const data = { name, price, category, date, dateNum, description };
+    await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getToken()}`,
+      },
+      body: JSON.stringify(data),
+    });
+    console.log("here");
+    setName("");
+    setDate("");
+    setDateNum(0);
+    setDescription("");
+    setPrice("");
+    setNum(num + 1);
+    setEdit(false);
+  }
+
   async function handleDelete(index, e) {
     const shouldRemove = window.confirm(
       "Are you sure you want to delete this transaction?"
@@ -300,7 +328,6 @@ function Main() {
       );
     }
   }
-
 
   function compare(a, b) {
     if (a.dateNum >= b.dateNum) {
@@ -331,7 +358,7 @@ function Main() {
           ${whole}
           {fraction}
         </h1>
-        <form onSubmit={addTransaction}>
+        <form onSubmit={edit ? editTransaction : addTransaction}>
           <div class="basics">
             <input
               autocomplete="off"
@@ -389,7 +416,9 @@ function Main() {
               placeholder={"Birthday celebration"}
             ></input>
           </div>
-          <button type="submit">Add New Transaction</button>
+          <button type="submit">
+            {edit ? "Edit " : "Add New "}Transaction
+          </button>
         </form>
 
         <div class="filter">
@@ -431,6 +460,21 @@ function Main() {
                   <div class="date">{transaction.date}</div>
                 </div>
                 <div class="right">
+                  <button
+                    class="delete-btn"
+                    onClick={(e) => {
+                      setEdit(true);
+                      setEditId(transactions[index]._id);
+                      setPrice(transaction.price);
+                      setName(transaction.name);
+                      setCategory(transaction.category);
+                      setDate(transaction.date);
+                      setDateNum(transaction.dateNum);
+                      setDescription(transaction.description);
+                    }}
+                  >
+                    Edit
+                  </button>
                   <button
                     class="delete-btn"
                     onClick={(e) => handleDelete(index, e)}
