@@ -416,9 +416,10 @@ function Main() {
               placeholder={"Birthday celebration"}
             ></input>
           </div>
-          <button type="submit">
+          {edit ? (<div style={{display:"flex", gap:"5px"}}><button onClick={() => setEdit(false)}>Cancel Edit</button><button type="submit">Edit Transaction</button></div>) : (<button type="submit">Add New Transaction</button>)}
+          {/* <button type="submit">
             {edit ? "Edit " : "Add New "}Transaction
-          </button>
+          </button> */}
         </form>
 
         <div class="filter">
