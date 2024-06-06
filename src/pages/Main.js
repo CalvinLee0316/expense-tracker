@@ -34,16 +34,16 @@ function Main() {
     getTransactions(filter, month).then((t) => {
       setTransactions(t.toSorted(compare));
     });
-  }, [transactions, num, filter, month]);
+  }, [num, filter, month]);
 
   useEffect(() => {
     getTransactions("All", analyticsMonth).then((ts) => {
       let pieData = {};
       ts.forEach((transaction) => {
         if (pieData[transaction.category]) {
-          pieData[transaction.category] += transaction.price;
+          pieData[transaction.category] += parseInt(transaction.price);
         } else {
-          pieData[transaction.category] = transaction.price;
+          pieData[transaction.category] = parseInt(transaction.price);
         }
       });
 
@@ -117,9 +117,9 @@ function Main() {
           transaction.date.substring(0, 7).replace("-", "")
         );
         if (lineData[date]) {
-          lineData[date] += transaction.price;
+          lineData[date] += parseInt(transaction.price);
         } else {
-          lineData[date] = transaction.price;
+          lineData[date] = parseInt(transaction.price);
         }
       });
       const now = parseInt(getCurrentYearMonth().replace("-", ""));
@@ -256,7 +256,7 @@ function Main() {
 
   async function addTransaction(ev) {
     ev.preventDefault();
-    let re = /^\d+(?:[.]\d\d)*$/;
+    let re = /^\d+(?:[.]\d\d)$/;
     if (!re.test(price)) {
       alert("Please enter a valid price");
       return;
@@ -284,7 +284,7 @@ function Main() {
 
   async function editTransaction(ev) {
     ev.preventDefault();
-    let re = /^\d+(?:[.]\d\d)*$/;
+    let re = /^\d+(?:[.]\d\d)$/;
     if (!re.test(price)) {
       alert("Please enter a valid price");
       return;
@@ -461,7 +461,7 @@ function Main() {
                 </div>
                 <div class="right">
                   <button
-                    class="delete-btn"
+                    class="edit-btn"
                     onClick={(e) => {
                       setEdit(true);
                       setEditId(transactions[index]._id);
