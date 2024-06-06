@@ -299,7 +299,6 @@ function Main() {
       },
       body: JSON.stringify(data),
     });
-    console.log("here");
     setName("");
     setDate("");
     setDateNum(0);
@@ -416,7 +415,25 @@ function Main() {
               placeholder={"Birthday celebration"}
             ></input>
           </div>
-          {edit ? (<div style={{display:"flex", gap:"5px"}}><button onClick={() => setEdit(false)}>Cancel Edit</button><button type="submit">Edit Transaction</button></div>) : (<button type="submit">Add New Transaction</button>)}
+          {edit ? (
+            <div style={{ display: "flex", gap: "5px" }}>
+              <button
+                onClick={() => {
+                  setEdit(false);
+                  setName("");
+                  setDate("");
+                  setDateNum(0);
+                  setDescription("");
+                  setPrice("");
+                }}
+              >
+                Cancel Edit
+              </button>
+              <button type="submit">Edit Transaction</button>
+            </div>
+          ) : (
+            <button type="submit">Add New Transaction</button>
+          )}
           {/* <button type="submit">
             {edit ? "Edit " : "Add New "}Transaction
           </button> */}

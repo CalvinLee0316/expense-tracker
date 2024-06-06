@@ -89,7 +89,6 @@ app.delete('/api/deleteTransaction/:id', ClerkExpressWithAuth(), async (req, res
 });
 
 app.put('/api/editTransaction/:id', ClerkExpressWithAuth(), async (req, res)=>{
-    console.log("here2")
     await mongoose.connect(process.env.MONGO_URL);
     const {id} = req.params;
     const user_id = req.auth.userId;
