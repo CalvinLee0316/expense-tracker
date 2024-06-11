@@ -339,7 +339,7 @@ function Main() {
   let balance = 0;
 
   transactions.forEach((transaction) => {
-    balance += parseInt(transaction.price);
+    balance += parseFloat(transaction.price);
   });
 
   balance = balance.toFixed(2);
