@@ -278,6 +278,7 @@ function Main() {
         setDescription("");
         setPrice("");
         setNum(num + 1);
+        setCategory("Groceries");
       })
     );
   }
@@ -306,6 +307,7 @@ function Main() {
     setPrice("");
     setNum(num + 1);
     setEdit(false);
+    setCategory("Groceries");
   }
 
   async function handleDelete(index, e) {
@@ -425,6 +427,7 @@ function Main() {
                   setDateNum(0);
                   setDescription("");
                   setPrice("");
+                  setCategory("Groceries")
                 }}
               >
                 Cancel Edit
