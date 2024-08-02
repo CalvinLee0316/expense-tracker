@@ -16,7 +16,7 @@ function Main() {
   const [filter, setFilter] = useState("All");
   const [transactions, setTransactions] = useState([]);
   const [num, setNum] = useState(0);
-  const [month, setMonth] = useState("");
+  const [month, setMonth] = useState(getCurrentYearMonth);
 
   const [edit, setEdit] = useState(false);
   const [editId, setEditId] = useState("");
@@ -224,7 +224,8 @@ function Main() {
     let url = "";
     if (f === "All") {
       if (m === "") {
-        url = process.env.REACT_APP_API_URL + "/getTransactions";
+        // let month=getCurrentYearMonth()
+        url = process.env.REACT_APP_API_URL + "/getTransactions/date/:"+month;
       } else {
         url = process.env.REACT_APP_API_URL + "/getTransactions/date/:" + m;
       }
@@ -376,6 +377,7 @@ function Main() {
       </div>
       <div class="mainTracker">
         <h1>Welcome {user.firstName}!</h1>
+        <h1 class="spendDate"> Spending for {month}: </h1>
         <h1>
           ${whole}
           {fraction}

@@ -3,6 +3,9 @@
     box-sizing: border-box;
   }
 
+  .spendDate{
+    font-size: 2vw;
+  }
   .mainTracker {
     width: 35%;
     height: 100%;
@@ -580,3 +583,7 @@ button.delete-all-btn:hover {
 }
 
 
+
+.spendDate{
+  font-size: 2vw;
+}
