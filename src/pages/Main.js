@@ -321,7 +321,28 @@ function Main() {
         transactions[index]._id;
       fetch(url, {
         method: "DELETE",
-        Authorization: `Bearer ${await getToken()}`,
+        headers:{
+          Authorization: `Bearer ${await getToken()}`,
+        }
+      }).then((response) =>
+        response.json().then((json) => {
+          setNum(num + 1);
+        })
+      );
+    }
+  }
+
+  async function handleDeleteAll(e) {
+    const shouldRemove = window.confirm(
+      "Are you sure you want to delete ALL transactions on your account?"
+    );
+    if (shouldRemove) {
+      const url = process.env.REACT_APP_API_URL + "/deleteAllTransaction";
+      fetch(url, {
+        method: "DELETE",
+        headers:{
+          Authorization: `Bearer ${await getToken()}`,
+        }
       }).then((response) =>
         response.json().then((json) => {
           setNum(num + 1);
@@ -359,6 +380,16 @@ function Main() {
           ${whole}
           {fraction}
         </h1>
+        <div class="delete-all">
+          <button
+            class="delete-all-btn"
+            onClick={(e) => {
+              handleDeleteAll();
+            }}
+          >
+            Delete All Transactions
+          </button>
+        </div>
         <form onSubmit={edit ? editTransaction : addTransaction}>
           <div class="basics">
             <input
@@ -427,7 +458,7 @@ function Main() {
                   setDateNum(0);
                   setDescription("");
                   setPrice("");
-                  setCategory("Groceries")
+                  setCategory("Groceries");
                 }}
               >
                 Cancel Edit

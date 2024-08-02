@@ -47,8 +47,12 @@
     margin-top: 6px;
   }
 
+  .delete-all{
+    margin-top:20px;
+  }
+
   form {
-    margin-top: 20px;
+    margin-top: 0px;
   }
 
   form input {
@@ -274,6 +278,23 @@
   }
 }
 
+button.delete-all-btn {
+  cursor: pointer;
+  border: 0;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+  transition: 0.4s;
+  width: 100%;
+  padding:5px;
+}
+
+button.delete-all-btn:hover {
+  color: white;
+  box-shadow: 0 0 10px red;
+  background-color: red;
+}
+
 /* -------------------------------------------------------------------------- */
 
 @media screen and (max-width: 600px) {
@@ -329,8 +350,12 @@
     margin-top: 6px;
   }
 
-  form {
+  .delete-all{
     margin-top: 20px;
+  }
+
+  form {
+    margin-top: 0px;
   }
 
   form input {
@@ -512,6 +537,17 @@
     padding: 10px 0;
     box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
     transition: 0.4s;
+  }
+
+  button.delete-all-btn {
+    cursor: pointer;
+    border: 0;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+    transition: 0.4s;
+    width: 100%;
+    padding:5px;
   }
 
   .log {

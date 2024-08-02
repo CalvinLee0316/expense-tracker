@@ -27,9 +27,6 @@ app.post('/api/addTransaction', ClerkExpressWithAuth(),async (req, res) => {
 app.get('/api/getTransactions', ClerkExpressWithAuth(), async (req, res) => {
     await mongoose.connect(process.env.MONGO_URL);
     const id = req.auth.userId;
-    // console.log("Here")
-    // console.log(req.auth)
-    // console.log(req.auth.userId);
     const transactions = await Transaction.find({user_id:id});
     res.json(transactions);
 });
@@ -86,6 +83,13 @@ app.delete('/api/deleteTransaction/:id', ClerkExpressWithAuth(), async (req, res
     const {id} = req.params;
     await Transaction.findByIdAndDelete(id);
     res.json({message: 'Transaction deleted'});
+});
+
+app.delete('/api/deleteAllTransaction', ClerkExpressWithAuth(), async (req, res) => {
+    await mongoose.connect(process.env.MONGO_URL);
+    const id = req.auth.userId;
+    await Transaction.deleteMany({user_id:id});
+    res.json({message: 'All transaction deleted'});
 });
 
 app.put('/api/editTransaction/:id', ClerkExpressWithAuth(), async (req, res)=>{
