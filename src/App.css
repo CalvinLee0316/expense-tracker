@@ -3,6 +3,12 @@
     box-sizing: border-box;
   }
 
+
+  .loader{
+    padding: auto;
+    margin: auto;
+  }
+
   .spendDate{
     font-size: 2vw;
   }
@@ -305,6 +311,10 @@ button.delete-all-btn:hover {
     box-sizing: border-box;
   }
 
+  .loader{
+    padding: auto;
+    margin: auto;
+  }
   .mainTracker {
     width: 100%;
     height: 80vh;

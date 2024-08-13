@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import * as echarts from "echarts";
 import ReactEcharts from "echarts-for-react";
+import { BeatLoader } from "react-spinners";
 // import { ClerkProvider } from "@clerk/clerk-react";
 import { UserButton, useUser } from "@clerk/clerk-react";
 function Main() {
+  const [loading, setLoading] = useState(false);
+  const loadingTime = 500;
   //spending states
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -31,12 +34,15 @@ function Main() {
   const [lineOption, setLineOption] = useState({});
 
   useEffect(() => {
+    setLoading(true);
     getTransactions(filter, month).then((t) => {
       setTransactions(t.toSorted(compare));
+      setLoading(false);
     });
   }, [num, filter, month]);
 
   useEffect(() => {
+    setLoading(true);
     getTransactions("All", analyticsMonth).then((ts) => {
       let pieData = {};
       ts.forEach((transaction) => {
@@ -93,6 +99,7 @@ function Main() {
         ],
       };
       setPieOption(pieOption);
+      setLoading(false);
     });
   }, [transactions, analyticsMonth]);
 
@@ -110,6 +117,7 @@ function Main() {
 
   useEffect(() => {
     //line graph options
+    setLoading(true);
     getYearsTransactions().then((ts) => {
       let lineData = {};
       ts.forEach((transaction) => {
@@ -181,8 +189,11 @@ function Main() {
         ],
       };
       setLineOption(lineOption);
+      setLoading(false);
     });
   }, [transactions, num]);
+
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
   function getCurrentYearMonth() {
     const date = new Date();
@@ -217,6 +228,7 @@ function Main() {
       },
     });
     const json = await res.json();
+    await delay(loadingTime);
     return json;
   }
 
@@ -225,7 +237,7 @@ function Main() {
     if (f === "All") {
       if (m === "") {
         // let month=getCurrentYearMonth()
-        url = process.env.REACT_APP_API_URL + "/getTransactions/date/:"+month;
+        url = process.env.REACT_APP_API_URL + "/getTransactions/date/:" + month;
       } else {
         url = process.env.REACT_APP_API_URL + "/getTransactions/date/:" + m;
       }
@@ -252,10 +264,12 @@ function Main() {
       },
     });
     const json = await res.json();
+    await delay(loadingTime);
     return json;
   }
 
   async function addTransaction(ev) {
+    setLoading(true);
     ev.preventDefault();
     let re = /^\d+(?:[.]\d\d)$/;
     if (!re.test(price)) {
@@ -264,27 +278,27 @@ function Main() {
     }
     const url = process.env.REACT_APP_API_URL + "/addTransaction";
     const data = { name, price, category, date, dateNum, description };
-    fetch(url, {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${await getToken()}`,
       },
       body: JSON.stringify(data),
-    }).then((response) =>
-      response.json().then((json) => {
-        setName("");
-        setDate("");
-        setDateNum(0);
-        setDescription("");
-        setPrice("");
-        setNum(num + 1);
-        setCategory("Groceries");
-      })
-    );
+    });
+    setName("");
+    setDate("");
+    setDateNum(0);
+    setDescription("");
+    setPrice("");
+    setNum(num + 1);
+    setCategory("Groceries");
+    await delay(loadingTime);
+    setLoading(false);
   }
 
   async function editTransaction(ev) {
+    setLoading(true);
     ev.preventDefault();
     let re = /^\d+(?:[.]\d\d)$/;
     if (!re.test(price)) {
@@ -309,6 +323,8 @@ function Main() {
     setNum(num + 1);
     setEdit(false);
     setCategory("Groceries");
+    await delay(loadingTime);
+    setLoading(false);
   }
 
   async function handleDelete(index, e) {
@@ -316,20 +332,20 @@ function Main() {
       "Are you sure you want to delete this transaction?"
     );
     if (shouldRemove) {
+      setLoading(true);
       const url =
         process.env.REACT_APP_API_URL +
         "/deleteTransaction/" +
         transactions[index]._id;
       fetch(url, {
         method: "DELETE",
-        headers:{
+        headers: {
           Authorization: `Bearer ${await getToken()}`,
-        }
-      }).then((response) =>
-        response.json().then((json) => {
-          setNum(num + 1);
-        })
-      );
+        },
+      });
+      setNum(num + 1);
+      await delay(loadingTime);
+      setLoading(false);
     }
   }
 
@@ -338,17 +354,17 @@ function Main() {
       "Are you sure you want to delete ALL transactions on your account?"
     );
     if (shouldRemove) {
+      setLoading(true);
       const url = process.env.REACT_APP_API_URL + "/deleteAllTransaction";
       fetch(url, {
         method: "DELETE",
-        headers:{
+        headers: {
           Authorization: `Bearer ${await getToken()}`,
-        }
-      }).then((response) =>
-        response.json().then((json) => {
-          setNum(num + 1);
-        })
-      );
+        },
+      });
+      setNum(num + 1);
+      await delay(loadingTime);
+      setLoading(false);
     }
   }
 
@@ -370,7 +386,14 @@ function Main() {
   const fraction = balance.substring(balance.length - 3, balance.length);
   const whole = balance.substring(0, balance.length - 3);
 
-  return (
+  return loading ? (
+    <main>
+      {" "}
+      <div class="loader">
+        <BeatLoader color="red" />
+      </div>{" "}
+    </main>
+  ) : (
     <main>
       <div class="float-child">
         <UserButton />
@@ -565,7 +588,6 @@ function Main() {
           <ReactEcharts option={lineOption} />
         </div>
       </div>
-      {/* </div> */}
     </main>
   );
 }
