@@ -7,7 +7,7 @@ import { BeatLoader } from "react-spinners";
 // import { ClerkProvider } from "@clerk/clerk-react";
 import { UserButton, useUser } from "@clerk/clerk-react";
 function Main() {
-  const [loading, setLoading] = useState(false);
+  const loading = false;
   const loadingTime = 500;
   //spending states
   const [name, setName] = useState("");
@@ -34,22 +34,21 @@ function Main() {
   const [lineOption, setLineOption] = useState({});
 
   useEffect(() => {
-    setLoading(true);
     getTransactions(filter, month).then((t) => {
       setTransactions(t.toSorted(compare));
-      setLoading(false);
     });
   }, [num, filter, month]);
 
   useEffect(() => {
-    setLoading(true);
     getTransactions("All", analyticsMonth).then((ts) => {
       let pieData = {};
       ts.forEach((transaction) => {
-        if (pieData[transaction.category]) {
-          pieData[transaction.category] += parseInt(transaction.price);
-        } else {
-          pieData[transaction.category] = parseInt(transaction.price);
+        if(transaction.category != "Income") {
+          if (pieData[transaction.category]) {
+            pieData[transaction.category] += parseFloat(transaction.price);
+          } else {
+            pieData[transaction.category] = parseFloat(transaction.price);
+          }
         }
       });
 
@@ -99,13 +98,12 @@ function Main() {
         ],
       };
       setPieOption(pieOption);
-      setLoading(false);
     });
   }, [transactions, analyticsMonth]);
 
   function subtractMonth(yyyymm) {
-    let year = parseInt(yyyymm.substring(0, 4));
-    let month = parseInt(yyyymm.substring(4, 6));
+    let year = parseFloat(yyyymm.substring(0, 4));
+    let month = parseFloat(yyyymm.substring(4, 6));
     if (month === 1) {
       year--;
       month = 12;
@@ -117,21 +115,22 @@ function Main() {
 
   useEffect(() => {
     //line graph options
-    setLoading(true);
     getYearsTransactions().then((ts) => {
       let lineData = {};
       ts.forEach((transaction) => {
-        const date = parseInt(
-          transaction.date.substring(0, 7).replace("-", "")
-        );
-        if (lineData[date]) {
-          lineData[date] += parseInt(transaction.price);
-        } else {
-          lineData[date] = parseInt(transaction.price);
+        if (transaction.category != "Income") {
+          const date = parseFloat(
+            transaction.date.substring(0, 7).replace("-", "")
+          );
+          if (lineData[date]) {
+            lineData[date] += parseFloat(transaction.price);
+          } else {
+            lineData[date] = parseFloat(transaction.price);
+          }
         }
       });
-      const now = parseInt(getCurrentYearMonth().replace("-", ""));
-      for (let i = now; i > now - 100; i = parseInt(subtractMonth(String(i)))) {
+      const now = parseFloat(getCurrentYearMonth().replace("-", ""));
+      for (let i = now; i > now - 100; i = parseFloat(subtractMonth(String(i)))) {
         if (!lineData[i]) {
           lineData[i] = 0;
         }
@@ -188,8 +187,8 @@ function Main() {
           },
         ],
       };
+      console.log(lineData)
       setLineOption(lineOption);
-      setLoading(false);
     });
   }, [transactions, num]);
 
@@ -269,7 +268,6 @@ function Main() {
   }
 
   async function addTransaction(ev) {
-    setLoading(true);
     ev.preventDefault();
     let re = /^\d+(?:[.]\d\d)$/;
     if (!re.test(price)) {
@@ -293,12 +291,9 @@ function Main() {
     setPrice("");
     setNum(num + 1);
     setCategory("Groceries");
-    await delay(loadingTime);
-    setLoading(false);
   }
 
   async function editTransaction(ev) {
-    setLoading(true);
     ev.preventDefault();
     let re = /^\d+(?:[.]\d\d)$/;
     if (!re.test(price)) {
@@ -324,7 +319,6 @@ function Main() {
     setEdit(false);
     setCategory("Groceries");
     await delay(loadingTime);
-    setLoading(false);
   }
 
   async function handleDelete(index, e) {
@@ -332,7 +326,6 @@ function Main() {
       "Are you sure you want to delete this transaction?"
     );
     if (shouldRemove) {
-      setLoading(true);
       const url =
         process.env.REACT_APP_API_URL +
         "/deleteTransaction/" +
@@ -345,7 +338,6 @@ function Main() {
       });
       setNum(num + 1);
       await delay(loadingTime);
-      setLoading(false);
     }
   }
 
@@ -354,7 +346,6 @@ function Main() {
       "Are you sure you want to delete ALL transactions on your account?"
     );
     if (shouldRemove) {
-      setLoading(true);
       const url = process.env.REACT_APP_API_URL + "/deleteAllTransaction";
       fetch(url, {
         method: "DELETE",
@@ -364,7 +355,6 @@ function Main() {
       });
       setNum(num + 1);
       await delay(loadingTime);
-      setLoading(false);
     }
   }
 
@@ -379,7 +369,12 @@ function Main() {
   let balance = 0;
 
   transactions.forEach((transaction) => {
-    balance += parseFloat(transaction.price);
+    if (transaction.category == "Income") {
+      balance += parseFloat(transaction.price)
+    } else {
+      balance -= parseFloat(transaction.price);
+    }
+
   });
 
   balance = balance.toFixed(2);
@@ -449,6 +444,7 @@ function Main() {
               <option value="Utilities">Utilities</option>
               <option value="Transportation">Transportation</option>
               <option value="Insurance">Insurance</option>
+              <option value="Income">Income</option>
             </select>
             <input
               autocomplete="off"
@@ -512,6 +508,7 @@ function Main() {
             <option value="Utilities">Utilities</option>
             <option value="Transportation">Transportation</option>
             <option value="Insurance">Insurance</option>
+            <option value="Income">Income</option>
           </select>
 
           <input
@@ -533,7 +530,11 @@ function Main() {
                 </div>
                 <div class="category">{transaction.category}</div>
                 <div class="middle">
-                  <div class="price">${transaction.price}</div>
+                  {transaction.category == "Income" ? (
+                    <div class="income">${transaction.price}</div>
+                  ) : (
+                    <div class="price">${transaction.price}</div>
+                  )}
                   <div class="date">{transaction.date}</div>
                 </div>
                 <div class="right">
